@@ -1,4 +1,3 @@
-'use strict';
 // Site-wide header and footer.
 const target = (item) => (item.newTab ? ' target="_blank" rel="noopener"' : '');
 
@@ -45,4 +44,4 @@ function renderFooter(settings, u) {
   return `<footer class="site-footer"><div class="container">${grid}${bottom}</div></footer>`;
 }
 
-module.exports = { renderHeader, renderFooter };
+export { renderHeader, renderFooter };

@@ -29,7 +29,7 @@ const TEMPLATES = {
     label: 'Business', icon: '🏢', description: 'Company or agency: home, services, about and contact pages.',
     build: (name) => ({
       settings: {
-        theme: { primary: '#2563eb', headingFont: 'Plus Jakarta Sans', bodyFont: 'Inter' },
+        theme: { animationStyle: 'elegant', primary: '#2563eb', headingFont: 'Plus Jakarta Sans', bodyFont: 'Inter' },
         header: {
           nav: [nav('Home', '/'), nav('Services', '/services'), nav('About', '/about'), nav('Contact', '/contact')],
           ctaText: 'Get a quote', ctaUrl: '/contact',
@@ -88,7 +88,7 @@ const TEMPLATES = {
     label: 'Product / SaaS', icon: '💻', description: 'One-page landing page with features, pricing and FAQ.',
     build: () => ({
       settings: {
-        theme: { primary: '#7c3aed', secondary: '#06b6d4', headingFont: 'Outfit', bodyFont: 'Inter', radius: 16, buttonShape: 'pill', surface: '#f6f4fe' },
+        theme: { animationStyle: 'elegant', primary: '#7c3aed', secondary: '#06b6d4', headingFont: 'Outfit', bodyFont: 'Inter', radius: 16, buttonShape: 'pill', surface: '#f6f4fe' },
         header: {
           nav: [nav('Features', '/#features'), nav('How it works', '/#how'), nav('Pricing', '/#pricing'), nav('FAQ', '/#faq')],
           ctaText: 'Start free trial', ctaUrl: '/#pricing', announcement: '🎉 Version 2.0 is here — see what’s new', announcementUrl: '/#features', announcementBg: '#7c3aed',
@@ -122,7 +122,7 @@ const TEMPLATES = {
     label: 'Portfolio', icon: '🎨', description: 'Personal portfolio for designers, photographers and creators.',
     build: (name) => ({
       settings: {
-        theme: { primary: '#111111', onPrimary: '#ffffff', headingFont: 'Space Grotesk', bodyFont: 'Inter', radius: 4, buttonShape: 'square', text: '#333333', headingColor: '#0a0a0a', surface: '#f4f4f2' },
+        theme: { animationStyle: 'expressive', primary: '#111111', onPrimary: '#ffffff', headingFont: 'Space Grotesk', bodyFont: 'Inter', radius: 4, buttonShape: 'square', text: '#333333', headingColor: '#0a0a0a', surface: '#f4f4f2' },
         header: { nav: [nav('Work', '/#work'), nav('About', '/about'), nav('Contact', '/#contact')], ctaText: 'Hire me', ctaUrl: '/#contact' },
         footer: { layout: 'simple', bg: '#0a0a0a', social: [link('Instagram', 'https://instagram.com'), link('Dribbble', 'https://dribbble.com'), link('LinkedIn', 'https://linkedin.com')] },
       },
@@ -148,11 +148,37 @@ const TEMPLATES = {
     }),
   },
 
+  personal: {
+    label: 'Personal', icon: '✨', description: 'A bold personal site: intro, story, projects, numbers and contact.',
+    build: (name) => ({
+      settings: {
+        theme: {
+          animationStyle: 'expressive', primary: '#7c3aed', secondary: '#ec4899', onPrimary: '#ffffff',
+          headingFont: 'Syne', bodyFont: 'DM Sans', h1Size: 4.4, headingWeight: '800', headingSpacing: '-0.03em',
+          bg: '#fcfbff', surface: '#f3effe', card: '#ffffff', text: '#3b3550', headingColor: '#140f24', muted: '#6e6787', border: '#e7e2f5',
+          radius: 22, buttonShape: 'pill', shadow: 'medium',
+        },
+        header: { nav: [nav('About', '/#about'), nav('Projects', '/#projects'), nav('Contact', '/#contact')], ctaText: 'Say hello', ctaUrl: '/#contact', sticky: true },
+        footer: { layout: 'simple', bg: '#140f24', social: [link('Instagram', 'https://instagram.com'), link('GitHub', 'https://github.com'), link('LinkedIn', 'https://linkedin.com')] },
+      },
+      pages: [
+        page('Home', 'home', [
+          s('hero', { eyebrow: 'Hello, world', title: `I'm ${name}. I make ideas real.`, subtitle: 'Writer, builder and lifelong learner. This is where I share what I am working on.', primaryText: 'See my projects', primaryUrl: '#projects', secondaryText: 'About me', secondaryUrl: '#about', layout: 'split', image: pic('cs-me', 1000, 1100), minHeight: 88 }, { align: 'left' }),
+          s('imageText', { image: pic('cs-desk', 1000, 1100), eyebrow: 'My story', title: 'Curious by default', content: '<p>I started out tinkering with things I did not understand, and never stopped. Today I help people turn messy ideas into things they can use.</p><p>When I am not working you will find me hiking, reading or cooking something new.</p>', buttonText: 'Get in touch', buttonUrl: '#contact' }, { anchor: 'about' }),
+          s('stats', { columns: '3', items: [{ value: '40+', label: 'Projects shipped' }, { value: '9', label: 'Years of practice' }, { value: '∞', label: 'Cups of coffee' }] }, { tone: 'surface' }),
+          s('gallery', { title: 'Things I have made', columns: '3', aspect: '3-4', items: [1, 2, 3, 4, 5, 6].map((i) => ({ image: pic(`cs-proj${i}`, 900, 1200), caption: ['Side project — Orbit', 'Essay — On focus', 'App — Habitual', 'Talk — Small steps', 'Zine — Field notes', 'Tool — Snip'][i - 1], url: '' })) }, { align: 'left', anchor: 'projects' }),
+          s('cta', { title: 'Have an idea? Let’s make it real.', text: 'I am always up for interesting projects and good conversations.', primaryText: 'Say hello', primaryUrl: '#contact' }),
+          s('contact', { title: 'Get in touch', subtitle: 'I reply within a couple of days.', address: '', phone: '' }, { anchor: 'contact' }),
+        ]),
+      ],
+    }),
+  },
+
   restaurant: {
     label: 'Restaurant / café', icon: '🍽️', description: 'Full-screen photo hero, menu, gallery, hours and reservations.',
     build: (name) => ({
       settings: {
-        theme: { primary: '#b45309', headingFont: 'Playfair Display', bodyFont: 'Lato', bg: '#fffbf5', surface: '#f7efe3', card: '#fffdf9', text: '#4a3d31', headingColor: '#24190f', muted: '#7a6a5a', border: '#eadfce', radius: 6, headingWeight: '600', headingSpacing: '0' },
+        theme: { animationStyle: 'elegant', primary: '#b45309', headingFont: 'Playfair Display', bodyFont: 'Lato', bg: '#fffbf5', surface: '#f7efe3', card: '#fffdf9', text: '#4a3d31', headingColor: '#24190f', muted: '#7a6a5a', border: '#eadfce', radius: 6, headingWeight: '600', headingSpacing: '0' },
         header: {
           transparent: true, sticky: true, bg: '#fffbf5', textColor: '#24190f',
           nav: [nav('Menu', '/#menu'), nav('Our story', '/#story'), nav('Gallery', '/#gallery'), nav('Visit', '/#visit')],

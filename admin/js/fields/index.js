@@ -5,6 +5,7 @@
 import { h, uid, stripHtml } from '../core/dom.js';
 import { iconBtn, sortable } from '../core/ui.js';
 import { openMediaPicker } from '../components/mediaLibrary.js';
+import { icon } from '../core/icons.js';
 
 const HEX = /^#[0-9a-f]{6}$/i;
 const normalizeOptions = (opts = []) => opts.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
@@ -155,8 +156,8 @@ function listField(fd, obj, ctx) {
       const head = h('div', { class: 'li-head', onclick: (e) => { if (!e.target.closest('button,.handle')) toggle(); } },
         h('span', { class: 'handle', title: 'Drag to reorder' }, '⋮⋮'), h('span', { class: 'caret' }, isOpen ? '▾' : '▸'), title,
         h('span', { class: 'li-actions' },
-          iconBtn('⧉', 'Duplicate', () => { const c = structuredClone(item); items.splice(i + 1, 0, c); open.add(keyOf(c)); ctx.onChange(); draw(); }),
-          iconBtn('🗑', 'Remove', () => { items.splice(i, 1); ctx.onChange(); draw(); }, 'danger')));
+          iconBtn(icon('copy', 14), 'Duplicate', () => { const c = structuredClone(item); items.splice(i + 1, 0, c); open.add(keyOf(c)); ctx.onChange(); draw(); }),
+          iconBtn(icon('trash', 14), 'Remove', () => { items.splice(i, 1); ctx.onChange(); draw(); }, 'danger')));
       const body = isOpen ? h('div', { class: 'li-body' }, buildFields(fd.fields, item, {
         ...ctx, onChange: () => { title.textContent = itemLabel(fd, item, i); ctx.onChange(); },
       })) : null;

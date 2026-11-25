@@ -1,4 +1,3 @@
-'use strict';
 // HTML helpers shared by all section renderers. Everything user-provided goes
 // through esc() unless it is intentionally HTML (rich text / custom HTML).
 const MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -42,4 +41,4 @@ function createHelpers({ base = '', mode = 'live', site, page, settings }) {
   return { esc, nl, url, img, btn, btns, eyebrow, head, cols, cssValue, base, mode, site, page, settings };
 }
 
-module.exports = { esc, nl, cssValue, safeCss, safeJs, hasValue, createHelpers };
+export { esc, nl, cssValue, safeCss, safeJs, hasValue, createHelpers };

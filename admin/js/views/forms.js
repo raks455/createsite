@@ -3,6 +3,7 @@ import { h } from '../core/dom.js';
 import { get, del } from '../core/api.js';
 import { toast, confirmBox } from '../core/ui.js';
 import { renderSiteLayout } from '../components/shell.js';
+import { icon } from '../core/icons.js';
 
 function toCsv(entries, columns) {
   const cell = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
@@ -41,7 +42,7 @@ export async function formsTab(site, reload) {
     h('div', { class: 'page-head' },
       h('div', null, h('h1', null, 'Form entries'), h('p', { class: 'muted' }, `${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}`)),
       entries.length ? h('div', { class: 'row' },
-        h('button', { class: 'btn', onclick: download }, '⬇ Export CSV'),
+        h('button', { class: 'btn', onclick: download }, icon('download', 15), 'Export CSV'),
         h('button', { class: 'btn danger-ghost', onclick: async () => {
           if (!(await confirmBox('Delete all form entries for this website?'))) return;
           await del(`/api/sites/${site.id}/submissions`); toast('All entries deleted'); reload();

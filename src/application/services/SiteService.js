@@ -3,7 +3,8 @@ const Site = require('../../domain/entities/Site');
 const { NotFoundError, ValidationError, ConflictError } = require('../../domain/errors');
 const { isObject, slugify } = require('../../domain/util');
 
-const PACKAGE_FORMAT = 'siteforge-site';
+const PACKAGE_FORMAT = 'createsite-site';
+const ACCEPTED_FORMATS = [PACKAGE_FORMAT, 'siteforge-site'];
 
 class SiteService {
   /** @param {{siteRepo: any, submissionRepo: any, mediaStorage: any, templates: any}} deps */
@@ -74,14 +75,14 @@ class SiteService {
       format: PACKAGE_FORMAT,
       version: 1,
       exportedAt: new Date().toISOString(),
-      site,
+      site: Site.publicCopy(site),
       media: files.map((f) => ({ name: f.name, data: f.buffer.toString('base64') })),
     };
   }
 
   async importPackage(pkg) {
-    if (!isObject(pkg) || pkg.format !== PACKAGE_FORMAT || !isObject(pkg.site)) {
-      throw new ValidationError('This file is not a SiteForge site package');
+    if (!isObject(pkg) || !ACCEPTED_FORMATS.includes(pkg.format) || !isObject(pkg.site)) {
+      throw new ValidationError('This file is not a CreateSite site package');
     }
     const src = pkg.site;
     const name = src.settings?.general?.name || 'Imported site';

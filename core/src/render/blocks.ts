@@ -1,5 +1,4 @@
-'use strict';
-// One renderer per section type (keys match domain/content/sectionTypes.js).
+// One renderer per section type (keys match content/sectionTypes.ts).
 // render(data, helpers, section) returns the HTML inside the section container.
 // Optional: style(data) adds inline CSS to the <section>; bare(data) skips the container.
 
@@ -167,4 +166,4 @@ const RENDERERS = {
   },
 };
 
-module.exports = { RENDERERS };
+export { RENDERERS };

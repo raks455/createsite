@@ -11,6 +11,7 @@ import { pageEditorView } from './views/pageEditor.js';
 import { settingsTab } from './views/settings.js';
 import { mediaTab } from './views/media.js';
 import { formsTab } from './views/forms.js';
+import { deployTab } from './views/deploy.js';
 import { accountView } from './views/account.js';
 
 const SETTINGS_TABS = ['theme', 'header', 'footer', 'seo', 'code', 'general'];
@@ -22,6 +23,7 @@ async function siteView(siteId, tab) {
   if (SETTINGS_TABS.includes(tab)) return settingsTab(site, tab, reload);
   if (tab === 'media') return mediaTab(site);
   if (tab === 'forms') return formsTab(site, reload);
+  if (tab === 'deploy') return deployTab(site, reload);
   location.hash = `#/site/${siteId}/pages`;
 }
 

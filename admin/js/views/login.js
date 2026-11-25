@@ -1,5 +1,7 @@
 import { h, $ } from '../core/dom.js';
 import { post } from '../core/api.js';
+import { icon } from '../core/icons.js';
+import { brand } from '../components/shell.js';
 
 export function renderLogin(onSuccess) {
   const error = h('div', { class: 'err' });
@@ -18,9 +20,21 @@ export function renderLogin(onSuccess) {
       button.disabled = false;
     }
   } },
-  h('div', { class: 'brand big' }, h('span', { class: 'brand-mark' }, '◆'), 'SiteForge'),
-  h('p', { class: 'muted' }, 'Sign in to manage your websites'),
-  username, password, error, button);
-  $('#app').replaceChildren(h('div', { class: 'login-wrap' }, form));
+  h('div', null, h('h1', null, 'Welcome back'), h('p', { class: 'muted', style: 'margin-top:6px' }, 'Sign in to manage your websites.')),
+  h('label', { class: 'fld' }, h('span', { class: 'lbl' }, 'Username'), username),
+  h('label', { class: 'fld' }, h('span', { class: 'lbl' }, 'Password'), password),
+  error, button);
+
+  const feat = (ico, text) => h('span', null, icon(ico, 14), text);
+  $('#app').replaceChildren(h('div', { class: 'login-wrap' },
+    h('div', { class: 'login-art' },
+      brand('brand big'),
+      h('div', null,
+        h('h2', null, 'Design it visually. ', h('span', null, 'Ship it anywhere.')),
+        h('p', null, 'Build websites with live preview and motion that fits the brand. Host them here, or export each one as its own TypeScript, Node.js and PostgreSQL app.')),
+      h('div', { class: 'login-feats' },
+        feat('sparkle', 'Elegant & expressive motion'), feat('database', 'PostgreSQL / Neon'),
+        feat('deploy', 'One-click Render deploy'), feat('code', 'TypeScript source export'))),
+    h('div', { class: 'login-side' }, form)));
   username.focus();
 }

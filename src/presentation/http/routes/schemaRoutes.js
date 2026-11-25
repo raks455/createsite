@@ -3,7 +3,7 @@
 const express = require('express');
 const { SECTION_TYPES } = require('../../../domain/content/sectionTypes');
 const { SITE_SETTINGS, PAGE_FIELDS, SECTION_STYLE_FIELDS } = require('../../../domain/content/siteSettings');
-const { FONT_LIST } = require('../../site/fonts');
+const { FONT_LIST } = require('../../site/SiteRenderer');
 
 module.exports = function schemaRoutes({ siteService }) {
   const r = express.Router();

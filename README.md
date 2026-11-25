@@ -31,40 +31,6 @@ Open **http://localhost:3000/admin** and sign in with `admin` / `admin123`. Chan
 - **Media library**, **form entries** (with CSV export), **coming-soon mode** and **multiple admin users**.
 - **Delivery**: each site is served at `/s/<slug>/`, or at the root of its own custom domain. It can also be exported as a **static HTML ZIP** for any host, or as a **site package (.json)** to move it to another SiteForge install.
 
-## Architecture
-
-The project follows clean architecture. Dependencies point inwards only.
-
-```
-src/
-├── domain/                 Pure business rules: no Express, no file system
-│   ├── content/            Content model: section types, settings schemas, field descriptors
-│   ├── entities/           Site, Page, User, Submission (factories + invariants)
-│   ├── errors.js           ValidationError, NotFoundError, ConflictError…
-│   └── util.js             ids, slugify, domain cleaning
-├── application/            Use cases. Depend on the domain and on ports only
-│   ├── ports.js            Interfaces: repositories, MediaStorage, PasswordHasher,
-│   │                       TokenService, SiteRenderer, ArchiveWriter
-│   ├── services/           SiteService, PageService, AuthService, MediaService,
-│   │                       SubmissionService, PublishingService
-│   └── templates.js        Starter site templates
-├── infrastructure/         Adapters that implement the ports
-│   ├── persistence/        JSON-file document store + repositories
-│   ├── storage/            Local-disk media storage
-│   ├── security/           scrypt password hashing, HMAC session tokens
-│   └── archive/            ZIP writer
-├── presentation/
-│   ├── http/               Express app, routes (thin controllers), middleware
-│   └── site/               SiteRenderer: theme → CSS variables, header/footer,
-│                           one renderer per section type, base stylesheet
-├── config.js               Environment configuration
-└── main.js                 Composition root: wires adapters into services
-admin/                      Admin single-page app (vanilla ES modules, no build step)
-├── js/core/                api client, DOM helpers, UI primitives, state
-├── js/fields/              Schema-driven form builder (generates every editor form)
-├── js/components/          live preview, media library, layout shell
-└── js/views/               dashboard, pages, page editor, settings, media, forms, account
-```
 
 **Swapping infrastructure.** To move to PostgreSQL/MongoDB, S3 or another hashing scheme, implement the matching port from `application/ports.js` and change one line in `src/main.js`. Domain and application code stay untouched.
 

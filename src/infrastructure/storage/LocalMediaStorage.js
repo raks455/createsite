@@ -1,16 +1,10 @@
 'use strict';
 // MediaStorage adapter that keeps files on local disk: <root>/<siteId>/<file>
-// and serves them at <publicBase>/<siteId>/<file>.
+// and serves them at <publicBase>/<siteId>/<file>. Used when DATABASE_URL is not set.
 const fs = require('fs/promises');
 const path = require('path');
+const { mimeOf, safeName, uniqueFileName } = require('./files');
 
-const MIME = {
-  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp',
-  '.avif': 'image/avif', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.mp4': 'video/mp4', '.webm': 'video/webm',
-  '.mov': 'video/quicktime', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.pdf': 'application/pdf',
-};
-
-const safeName = (name) => path.basename(String(name || ''));
 const exists = (p) => fs.access(p).then(() => true, () => false);
 
 class LocalMediaStorage {
@@ -32,7 +26,7 @@ class LocalMediaStorage {
       name,
       url: this.publicPrefix(siteId) + encodeURIComponent(name),
       size: stat.size,
-      type: MIME[path.extname(name).toLowerCase()] || 'application/octet-stream',
+      type: mimeOf(name),
       modifiedAt: stat.mtime.toISOString(),
     };
   }
@@ -45,11 +39,14 @@ class LocalMediaStorage {
     return files.sort((a, b) => b.modifiedAt.localeCompare(a.modifiedAt));
   }
 
+  async read(siteId, name) {
+    const file = path.join(this.dir(siteId), safeName(name));
+    if (!(await exists(file))) return null;
+    return { buffer: await fs.readFile(file), type: mimeOf(name) };
+  }
+
   async save(siteId, originalName, buffer) {
-    const ext = path.extname(originalName).toLowerCase().replace(/[^.a-z0-9]/g, '');
-    const stem = path.basename(originalName, path.extname(originalName)).toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50) || 'file';
-    const name = `${stem}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}${ext}`;
+    const name = uniqueFileName(originalName);
     const dir = this.dir(siteId);
     await fs.mkdir(dir, { recursive: true });
     const file = path.join(dir, name);

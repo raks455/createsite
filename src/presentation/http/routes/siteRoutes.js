@@ -2,7 +2,7 @@
 const express = require('express');
 const { asyncHandler: ah } = require('../middleware');
 
-module.exports = function siteRoutes({ siteService, pageService, publishingService }) {
+module.exports = function siteRoutes({ siteService, pageService, publishingService, sourceExportService }) {
   const r = express.Router();
 
   // --- Sites ---------------------------------------------------------------
@@ -22,12 +22,19 @@ module.exports = function siteRoutes({ siteService, pageService, publishingServi
 
   r.get('/sites/:id/export.json', ah(async (req, res) => {
     const pkg = await siteService.exportPackage(req.params.id);
-    res.attachment(`${pkg.site.settings.general.slug}.siteforge.json`).json(pkg);
+    res.attachment(`${pkg.site.settings.general.slug}.createsite.json`).json(pkg);
   }));
   r.get('/sites/:id/export.zip', ah(async (req, res) => {
     const site = await siteService.get(req.params.id);
     res.attachment(publishingService.exportFilename(site));
     await publishingService.exportStatic(site.id, res);
+  }));
+
+  // Full source code: TypeScript + Node.js + PostgreSQL project, ready for Render + Neon
+  r.get('/sites/:id/export-source.zip', ah(async (req, res) => {
+    const site = await siteService.get(req.params.id);
+    res.attachment(sourceExportService.filename(site));
+    await sourceExportService.exportSource(site.id, res);
   }));
 
   r.post('/sites/:id/preview', ah(async (req, res) => {

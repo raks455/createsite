@@ -32,24 +32,7 @@ class PublishingService {
    * @returns {{status: number, contentType: string, body: string}}
    */
   resolve(site, rawPath, { base, viewer = null, origin = '' }) {
-    const path = String(rawPath || '').replace(/^\/+|\/+$/g, '').toLowerCase();
-    const g = resolveSettings(site.settings).general;
-    const html = (status, body) => ({ status, contentType: 'text/html; charset=utf-8', body });
-
-    if (path === 'robots.txt') {
-      const noindex = resolveSettings(site.settings).seo.noindex;
-      return { status: 200, contentType: 'text/plain', body: `User-agent: *\n${noindex ? 'Disallow: /' : 'Allow: /'}\nSitemap: ${origin}${base}/sitemap.xml\n` };
-    }
-    if (path === 'sitemap.xml') {
-      const urls = site.pages.filter((p) => p.published && p.slug !== '404')
-        .map((p) => `<url><loc>${origin}${base}/${Site.isHome(site, p) ? '' : p.slug}</loc></url>`).join('');
-      return { status: 200, contentType: 'application/xml', body: `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>` };
-    }
-    if (g.maintenance && !viewer) return html(503, this.renderer.renderSpecial({ site, kind: 'maintenance', base }));
-
-    const page = Site.findPageByPath(site, path);
-    if (!page || (!page.published && !viewer)) return html(404, this.renderer.renderSpecial({ site, kind: '404', base }));
-    return html(200, this.renderer.renderPage({ site, page, base, mode: 'live' }));
+    return this.renderer.resolveRequest(site, rawPath, { base, viewer: !!viewer, origin });
   }
 
   /** Renders unsaved drafts (settings and/or a page) for the editor preview. */

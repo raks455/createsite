@@ -14,7 +14,7 @@ export function uploadZone(siteId, onUploaded) {
     ondragover: (e) => { e.preventDefault(); zone.classList.add('over'); },
     ondragleave: () => zone.classList.remove('over'),
     ondrop: (e) => { e.preventDefault(); zone.classList.remove('over'); upload(e.dataTransfer.files); },
-  }, h('b', null, '⬆ Drop files here or click to upload'), h('small', null, 'Images, video, PDF, fonts — up to 50 MB each'));
+  }, h('b', null, 'Drop files here or click to upload'), h('small', null, 'Images, video, PDF, fonts — up to 50 MB each'));
 
   async function upload(files) {
     if (!files || !files.length) return;

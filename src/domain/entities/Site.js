@@ -46,18 +46,12 @@ function applySettings(site, patch) {
 }
 
 const touch = (site) => { site.updatedAt = now(); };
-const homePage = (site) => site.pages.find((p) => p.id === site.settings.general.homePage) || site.pages[0] || null;
-const isHome = (site, page) => !!page && homePage(site)?.id === page.id;
+const { homePage, isHome, findPageByPath } = require('../../../core/dist/site');
 
 function findPage(site, pageId) {
   const page = site.pages.find((p) => p.id === pageId);
   if (!page) throw new NotFoundError('Page not found');
   return page;
-}
-
-function findPageByPath(site, path) {
-  if (!path) return homePage(site);
-  return site.pages.find((p) => p.slug === path) || null;
 }
 
 function uniquePageSlug(site, slug, exceptId) {
@@ -98,8 +92,15 @@ function reorderPages(site, ids) {
 }
 
 /** Deep copy with a new id (page ids are kept; they are only unique per site). */
-function copySite(site) {
+/** The site without builder-only data (deployment URL and token). Safe to export. */
+function publicCopy(site) {
   const c = clone(site);
+  delete c.deploy;
+  return c;
+}
+
+function copySite(site) {
+  const c = publicCopy(site);
   c.id = newId('s_');
   c.createdAt = c.updatedAt = now();
   return c;
@@ -109,11 +110,11 @@ function summary(site) {
   const g = resolveSettings(site.settings).general;
   return {
     id: site.id, name: g.name, slug: g.slug, domains: g.domains, maintenance: g.maintenance,
-    pageCount: site.pages.length, createdAt: site.createdAt, updatedAt: site.updatedAt,
+    pageCount: site.pages.length, deployUrl: site.deploy?.url || '', createdAt: site.createdAt, updatedAt: site.updatedAt,
   };
 }
 
 module.exports = {
   createSite, applySettings, normalizeGeneral, homePage, isHome, findPage, findPageByPath,
-  uniquePageSlug, addPage, updatePage, removePage, reorderPages, copySite, summary, touch,
+  uniquePageSlug, addPage, updatePage, removePage, reorderPages, copySite, publicCopy, summary, touch,
 };

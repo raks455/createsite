@@ -7,6 +7,7 @@ import { toast, modal, confirmBox, iconBtn, sortable } from '../core/ui.js';
 import { buildFields, updateLinkSuggestions } from '../fields/index.js';
 import { createPreview } from '../components/preview.js';
 import { renderShell, liveUrl } from '../components/shell.js';
+import { icon } from '../core/icons.js';
 
 export async function pageEditorView(siteId, pageId) {
   const site = await get(`/api/sites/${siteId}`);
@@ -100,9 +101,9 @@ export async function pageEditorView(siteId, pageId) {
       iconBtn('↑', 'Move up', () => move(i, -1)),
       iconBtn('↓', 'Move down', () => move(i, 1)),
       iconBtn('＋', 'Add section below', () => addSection(i + 1)),
-      iconBtn('⧉', 'Duplicate', () => duplicate(i)),
+      iconBtn(icon('copy', 14), 'Duplicate', () => duplicate(i)),
       iconBtn(hidden ? '◌' : '◉', hidden ? 'Show section' : 'Hide section', () => { b.style = b.style || {}; b.style.hidden = !hidden; changed(); draw(); }),
-      iconBtn('🗑', 'Delete', () => remove(i), 'danger')));
+      iconBtn(icon('trash', 14), 'Delete', () => remove(i), 'danger')));
 
     const card = h('div', { class: `blk${isOpen ? ' open' : ''}${hidden ? ' is-hidden' : ''}`, 'data-sort': b.id }, head);
     if (isOpen) {

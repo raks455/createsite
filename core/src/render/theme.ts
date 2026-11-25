@@ -1,7 +1,6 @@
-'use strict';
 // Turns theme/header/footer settings into CSS custom properties.
-const { cssValue, hasValue } = require('./helpers');
-const { fontStack } = require('./fonts');
+import { cssValue, hasValue } from './helpers';
+import { fontStack } from './fonts';
 
 const SHADOWS = {
   none: 'none',
@@ -57,4 +56,4 @@ function themeCss(settings) {
   return `:root{${body}}@media(max-width:768px){:root{--sec-pad:${Math.round(n(t.sectionPadding, 96) * 0.65)}px}}`;
 }
 
-module.exports = { themeCss };
+export { themeCss };

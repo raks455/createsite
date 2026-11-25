@@ -49,7 +49,7 @@ function dangerZone(site) {
         toast('Website duplicated');
         location.hash = `#/site/${copy.id}/pages`;
       } }, '⧉ Duplicate website')),
-    h('p', { class: 'help' }, 'The site package can be imported into any SiteForge install. The ZIP can be uploaded to any static host (Netlify, cPanel, S3…).'),
+    h('p', { class: 'help' }, 'The site package can be imported into any CreateSite install. The ZIP can be uploaded to any static host (Netlify, cPanel, S3…). For the full TypeScript + PostgreSQL source code, open Deploy & code.'),
     h('h4', { class: 'danger-title' }, 'Danger zone'),
     h('button', { class: 'btn sm danger', onclick: async () => {
       if (!(await confirmBox(`Delete “${site.settings.general.name}” with all pages, media and form entries? This cannot be undone.`))) return;

@@ -1,19 +1,23 @@
 {
-  "name": "siteforge",
+  "name": "createsite",
   "version": "1.0.0",
-  "description": "Multi-site website builder with a visual admin panel",
+  "description": "CreateSite: build websites visually, host them on Render + Neon, and export each one as a TypeScript + Node.js + PostgreSQL app",
   "private": true,
   "main": "server.js",
   "scripts": {
+    "build": "tsc -p core",
+    "postinstall": "npm run build",
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "npm run build && node --watch server.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "archiver": "^7.0.1",
     "express": "^4.21.2",
-    "multer": "^2.0.0"
+    "multer": "^2.0.0",
+    "pg": "^8.23.1",
+    "typescript": "^7.0.2"
   }
 }

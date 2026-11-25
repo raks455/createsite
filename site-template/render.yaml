@@ -1,0 +1,18 @@
+# Render Blueprint for {{NAME}}.
+# In Render: New + → Blueprint → pick this repository. Paste your Neon
+# connection string when asked for DATABASE_URL.
+services:
+  - type: web
+    name: {{SLUG}}
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /_createsite/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_TOKEN
+        generateValue: true

@@ -1,4 +1,5 @@
-*,*::before,*::after{box-sizing:border-box}
+// Base stylesheet for every generated site (inlined into each page).
+export const BASE_CSS = `*,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;font-family:var(--font-body);font-size:var(--fs);line-height:var(--lh);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 img,video{max-width:100%;height:auto;display:block}
@@ -242,6 +243,58 @@ p:last-child{margin-bottom:0}
 .lb img{max-width:100%;max-height:100%;border-radius:8px}
 @media(max-width:768px){.hide-m{display:none!important}}
 @media(min-width:769px){.hide-d{display:none!important}}
-.anim .sec>.container{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
-.anim .sec.in>.container{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.anim .sec>.container{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+.site-header.sticky:not(.transparent).scrolled{box-shadow:0 1px 0 rgba(16,24,40,.04),0 10px 30px rgba(16,24,40,.07)}
+
+/* ---------- Motion ----------
+   JS adds .anim + .anim-<style> to <body> and .rv (reveal) to elements, with
+   --i as their stagger index. Elements get .in when they scroll into view and
+   .done once the entrance has finished (so hover effects respond instantly). */
+.anim .rv{--ease:cubic-bezier(.22,1,.36,1);transition:opacity .9s var(--ease),transform 1s var(--ease),filter .9s var(--ease),clip-path 1.2s var(--ease),box-shadow .3s;transition-delay:calc(var(--i,0) * 90ms)}
+.anim .rv.done{transition:opacity .3s,transform .35s var(--ease),filter .3s,box-shadow .35s,clip-path .3s;transition-delay:0s}
+
+/* Minimal: quiet fade */
+.anim-minimal .rv:not(.in){opacity:0}
+
+/* Elegant: soft rise with a touch of blur, images unveil, cards lift on hover */
+.anim-elegant .rv:not(.in){opacity:0;transform:translateY(26px);filter:blur(6px)}
+.anim-elegant .sec-hero h1.rv:not(.in){transform:translateY(18px);letter-spacing:.02em}
+.anim-elegant .sec-hero h1.rv{transition-property:opacity,transform,filter,letter-spacing}
+.anim-elegant :is(.hero-img,.hero-below,.split-media).rv{transform:none;filter:none}
+.anim-elegant :is(.hero-img,.hero-below,.split-media).rv:not(.in){opacity:1;clip-path:inset(12% 10% 12% 10% round var(--radius))}
+.anim-elegant :is(.hero-img,.hero-below,.split-media).rv.in{clip-path:inset(0 0 0 0 round 0)}
+.anim-elegant :is(.hero-img,.hero-below,.split-media).rv img{transition:transform 1.6s cubic-bezier(.22,1,.36,1)}
+.anim-elegant :is(.hero-img,.hero-below,.split-media).rv:not(.in) img{transform:scale(1.12)}
+.anim-elegant .card.rv.done:hover{transform:translateY(-6px)}
+.anim-elegant .st-raised.rv.done:hover{box-shadow:0 2px 6px rgba(16,24,40,.06),0 24px 48px rgba(16,24,40,.12)}
+.anim-elegant .gallery a img{transition:transform .9s cubic-bezier(.22,1,.36,1)}
+.anim-elegant .btn{transition:transform .35s cubic-bezier(.22,1,.36,1),filter .2s,box-shadow .35s}
+.anim-elegant .btn:hover{box-shadow:0 10px 24px -10px color-mix(in srgb,var(--primary) 70%,transparent)}
+
+/* Expressive: word-by-word headings, scale-in cards, tilt, parallax, cursor */
+.anim-expressive .rv:not(.in){opacity:0;transform:translateY(60px) scale(.96)}
+.anim-expressive .grid>.rv:not(.in){transform:translateY(80px) rotate(2deg) scale(.92)}
+.anim-expressive .rv.rv-split{opacity:1;transform:none;filter:none}
+.anim-expressive .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+.anim-expressive .wi{display:inline-block;transition:transform 1.1s cubic-bezier(.16,1,.3,1),opacity .8s;transition-delay:calc(var(--i,0) * 90ms + var(--w,0) * 55ms)}
+.anim-expressive .rv-split:not(.in) .wi{transform:translateY(105%) rotate(6deg);opacity:0}
+.anim-expressive :is(.hero-img,.hero-below,.split-media).rv:not(.in){opacity:1;transform:none;clip-path:inset(100% 0 0 0 round var(--radius))}
+.anim-expressive :is(.hero-img,.hero-below,.split-media).rv.in{clip-path:inset(0 0 0 0 round var(--radius))}
+.anim-expressive .par{will-change:transform}
+.anim-expressive .card.rv.done{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .4s}
+.anim-expressive .card.rv.done.tilting{transition:transform .12s linear,box-shadow .4s}
+.anim-expressive .card.rv.done:hover{--ty:-8px;box-shadow:0 30px 60px -20px rgba(0,0,0,.3)}
+.anim-expressive .gallery a{position:relative}
+.anim-expressive .gallery a::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.35),transparent 70%);transform:translateX(-120%);transition:transform .9s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.anim-expressive .gallery a:hover::after{transform:translateX(120%)}
+.anim-expressive .gallery a:hover img{transform:scale(1.07) rotate(-.6deg)}
+.anim-expressive .btn{transition:transform .3s cubic-bezier(.22,1,.36,1),filter .2s}
+.anim-expressive .nav a{position:relative}
+.anim-expressive .nav a::after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:2px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.anim-expressive .nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));transform-origin:0 50%;transform:scaleX(0);z-index:9998;pointer-events:none}
+.cursor-dot{position:fixed;top:0;left:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:9999;transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),margin .3s cubic-bezier(.22,1,.36,1),opacity .3s;opacity:0}
+.cursor-dot.on{opacity:1}
+.cursor-dot.big{width:56px;height:56px;margin:-28px 0 0 -28px}
+
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+`;

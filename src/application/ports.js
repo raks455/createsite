@@ -2,8 +2,8 @@
 /**
  * Ports: the interfaces the application layer depends on. Infrastructure
  * provides the implementations, wired together in src/main.js.
- * To move from JSON files to Postgres/Mongo/S3, implement these and change
- * only the composition root.
+ * JSON files (local) and PostgreSQL (DATABASE_URL, e.g. Neon) adapters exist;
+ * add others (Mongo, S3…) by implementing these and changing only the composition root.
  *
  * @typedef {Object} SiteRepository
  * @property {() => Promise<object[]>} findAll
@@ -31,6 +31,7 @@
  * @typedef {{name: string, url: string, size: number, type: string, modifiedAt: string}} MediaFile
  * @typedef {Object} MediaStorage
  * @property {(siteId: string) => Promise<MediaFile[]>} list
+ * @property {(siteId: string, name: string) => Promise<{buffer: Buffer, type: string}|null>} read
  * @property {(siteId: string, originalName: string, buffer: Buffer) => Promise<MediaFile>} save
  * @property {(siteId: string, name: string) => Promise<void>} remove
  * @property {(siteId: string) => Promise<void>} removeAll
@@ -50,6 +51,9 @@
  * @typedef {Object} SiteRenderer
  * @property {(args: {site: object, page: object, base: string, mode: 'live'|'preview'|'export'}) => string} renderPage
  * @property {(args: {site: object, kind: '404'|'maintenance', base: string, mode?: string}) => string} renderSpecial
+ *
+ * @typedef {Object} SourceTemplate  Files of the standalone TypeScript project an exported site is built from
+ * @property {(vars: {NAME: string, SLUG: string}) => Promise<{name: string, content: string|Buffer}[]>} files
  *
  * @typedef {Object} ArchiveWriter
  * @property {(entries: {name: string, content: string|Buffer}[], output: import('stream').Writable) => Promise<void>} zip

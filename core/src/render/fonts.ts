@@ -1,4 +1,3 @@
-'use strict';
 // Google Fonts offered in the font picker, with the weights each one supports.
 // Any other Google font name also works (loaded at its default weight).
 const GOOGLE_FONTS = {
@@ -47,8 +46,8 @@ function fontStack(name) {
   return `"${n}", ${fallback}`;
 }
 
-function fontLinks(names) {
-  const families = [...new Set(names.map(clean).filter((n) => n && !SYSTEM_FONTS.includes(n)))];
+function fontLinks(names: string[]): string {
+  const families: string[] = [...new Set<string>(names.map(clean).filter((n) => n && !SYSTEM_FONTS.includes(n)))];
   if (!families.length) return '';
   const query = families.map((f) => `family=${f.replace(/ /g, '+')}${GOOGLE_FONTS[f] ? `:wght@${GOOGLE_FONTS[f]}` : ''}`).join('&');
   return `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?${query}&display=swap">`;
@@ -56,4 +55,4 @@ function fontLinks(names) {
 
 const FONT_LIST = [...Object.keys(GOOGLE_FONTS), ...SYSTEM_FONTS.slice(0, 6)];
 
-module.exports = { fontStack, fontLinks, FONT_LIST };
+export { fontStack, fontLinks, FONT_LIST };
